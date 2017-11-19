@@ -5,10 +5,12 @@
 
 Интерфейсы для управления | ОС | Языки/платформа | Краткое описание 
 :---: | :---: | :---: | :---:
-Portainer | Linux, Mac OS X, Windows. | Go, JavaScript (Angular) | веб-интерфейс для работы с Docker-хостами и кластерами Docker Swarm.
-
-1 | 2 | 3
-
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
+Portainer | Linux, Mac OS X, Windows | Go, JavaScript (Angular) | Web-интерфейс для работы с Docker-хостами и кластерами Docker Swarm
 
 
 

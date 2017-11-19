@@ -1,37 +1,51 @@
-## Welcome to GitHub Pages
+# Проектирование облачной файловой системы
+## Построение общего хранилища для контейнеров
 
-You can use the [editor on GitHub](https://github.com/den5509/lab_4_graphi/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+Сначала был создан том AllVolume при помощи команды:
+```bash
+docker volume create --name AllVolume
 ```
+Опустим рисунок, так как там просто выполнение команды(я просто забыл его зафиксировать)
+Потом был создан и запущен первый контейнер 1, с примонтированным к нему томом AllVolume.
+Использованная команда:
+```bash
+docker run -ti --name=Container1 -v AllVolume:/allvolume alpine
+```
+В томе AllVolume был создан файл, содержащий строку с идентификатором контейнера.
+Примененная команда:
+```bash
+echo "write some information from " + $HOSTNAME > /allvolume/file.txt
+```
+![alt]({{"/Снимок экрана от 2017-11-15 10-06-13.png" | absolute_url}})
+Рисунок 1 — Создание контейнера No1
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Далее был создан запущен контейнер 2 с примонтированным ранее созданным томом AllVolume
+Использованная команда:
+```bash
+docker run -ti --name=Container2 --volumes-from Contaier1 alpine
+```
+Для проверки того, что файлы в томе дейтсвительно общие, было прочитано содержимое файла file.txt, в котором раньше была произведена запись в контейнере 1 использованна команда:
+```bash
+cat /myvolume/file.txt
+```
+![alt]({{"/Снимок экрана от 2017-11-15 10-06-53.png" | absolute_url}})
+Рисунок 2 — Создание контейнера No2 с примонтированным общим томом
 
-### Jekyll Themes
+Затем, уже из контейнера 2 в тот же файл была записана строка с идентификатором контейнера. Далее содержимое было прочитано из контейнера 1:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/den5509/lab_4_graphi/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+![alt]({{"/Снимок экрана от 2017-11-15 10-08-02.png" | absolute_url}})
+Рисунок 3 — Запись в файл из контейнера 2 и чтение из контейнера 1
+Для проверки работы при одновременной записи из контейнеров в один и тот же файл, одновременно был запущен цикл с записью аналогичных строк использовалась команда:
+```bash
+date; for I in `seq 99999`; do echo "write some information from " + $HOSTNAME > /allvolume/file.txt; done; date;
+```
+![alt]({{"/Снимок экрана от 2017-11-15 10-10-54.png" | absolute_url}})
 
-### Support or Contact
+Рисунок 4 — Запуск циклов записи в файл
+![alt]({{"/Снимок экрана от 2017-11-15 10-20-43.png" | absolute_url}})
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Рисунок 5 — Часть содержимого файла
+
+---
+## Вывод
+Доказано, что во время одновременной отработки циклов записи из двух контейнеров в 1 файл, конфликтов не происходит и все строки записываются в файл по мере вызова соответствующей команды, а при одновременной записи в файл, она производилась поочередно, опять же без каких лмбо конфликтов или потерь. 
